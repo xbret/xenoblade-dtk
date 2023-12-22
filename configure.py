@@ -27,7 +27,7 @@ from tools.project import (
 # Game versions
 DEFAULT_VERSION = 0
 VERSIONS = [
-    "GAMEID",	# 0
+    "SX4J01",	# 0
 ]
 
 if len(VERSIONS) > 1:
