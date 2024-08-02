@@ -14,6 +14,7 @@ u32 regionIndex2;
 bool lbl_80665E38;
 bool lbl_80665E39;
 s32 lbl_80667E50;
+bool lbl_80667E54;
 BOOL lbl_80667E58;
 
 
