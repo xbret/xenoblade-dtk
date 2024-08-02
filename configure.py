@@ -752,7 +752,7 @@ config.libs = [
     {
         "lib": "TRK_Hollywood_Revolution",
         "mw_console": "Wii",
-        "mw_version": "1.0",
+        "mw_version": "1.0a",
         "root_dir": "libs/PowerPC_EABI_Support",
         "cflags": cflags_trk,
         "host": True,
@@ -781,7 +781,7 @@ config.libs = [
             Object(Matching, "MetroTRK/msgbuf.c"),
             Object(Matching, "MetroTRK/msghndlr.c", extra_cflags = ["-str pool"]),
             Object(Matching, "MetroTRK/mslsupp.c"),
-            Object(NonMatching, "MetroTRK/targimpl.c", extra_cflags = ["-inline auto", "-pool off"]),
+            Object(Matching, "MetroTRK/targimpl.c", extra_cflags = ["-inline auto", "-pool off"]),
             Object(Matching, "MetroTRK/target_options.c"),
         ],
     },
@@ -1113,7 +1113,7 @@ config.libs = [
     DolphinLib(
         "os",
         [
-            Object(NonMatching, "revolution/os/OS.c"),
+            Object(Matching, "revolution/os/OS.c"),
             Object(Matching, "revolution/os/OSAlarm.c"),
             Object(Matching, "revolution/os/OSAlloc.c"),
             Object(Matching, "revolution/os/OSArena.c"),
