@@ -1094,8 +1094,8 @@ def generate_objdiff_config(
             return
 
         cflags = options["cflags"]
-        src_obj_path = build_path / "src" / f"{obj.base_name}.o"
-        src_ctx_path = build_path / "src" / f"{obj.base_name}.ctx"
+        src_obj_path = build_path / root_dir / "src" / f"{obj.base_name}.o"
+        src_ctx_path = build_path / root_dir / "src" / f"{obj.base_name}.ctx"
 
         reverse_fn_order = False
         if type(cflags) is list:
