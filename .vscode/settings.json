@@ -1,0 +1,31 @@
+{
+    "[c]": {
+        "files.encoding": "utf8",
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[cpp]": {
+        "files.encoding": "utf8",
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "editor.tabSize": 4,
+	"files.exclude": {
+        "**/CVS": false,
+		"**/*.ctx": true
+	},
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.associations": {
+        "*.inc": "cpp"
+    },
+    "search.useIgnoreFiles": false,
+    "search.exclude": {
+        "build/*/config.json": true,
+        "build/**/*.MAP": true,
+        "build.ninja": true,
+        ".ninja_*": true,
+        "objdiff.json": true
+    }
+}

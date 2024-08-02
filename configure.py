@@ -164,7 +164,7 @@ config.reconfig_deps = []
 cflags_base = [
     "-nodefaults",
     "-proc gekko",
-    #"-align powerpc",
+    "-align powerpc",
     "-enum int",
     "-fp hard",
     "-Cpp_exceptions off",
@@ -172,13 +172,13 @@ cflags_base = [
     # "-W all",
     "-O4,p",
     "-inline auto",
-    #'-pragma "cats off"',
-    #'-pragma "warn_notinlined off"',
-    #"-maxerrors 1",
+    '-pragma "cats off"',
+    '-pragma "warn_notinlined off"',
+    "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
-    #"-fp_contract on",
-   #"-str reuse",
+    "-fp_contract on",
+    #"-str reuse",
     "-enc SJIS",
     "-i include",
     "-i libs/RVL_SDK/include/",
@@ -223,6 +223,7 @@ cflags_mslc = [
     *cflags_base,
     "-use_lmw_stmw on",
     "-str reuse,pool,readonly",
+    "-fp_contract off",
     "-inline on",
     "-ipa file",
     "-func_align 4",
@@ -240,6 +241,7 @@ cflags_sdk = [
     *cflags_base,
     "-inline auto",
     "-ipa file",
+    "-fp_contract off",
     "-func_align 16",
 ]
 
@@ -257,6 +259,7 @@ cflags_nw4r = [
     *cflags_base,
     "-inline auto",
     "-use_lmw_stmw on",
+    "-fp_contract off",
     "-func_align 4",
 ]
 
@@ -656,10 +659,10 @@ config.libs = [
             Object(Matching, "Runtime/__mem.c"),
             Object(Matching, "Runtime/__va_arg.c"),
             Object(Matching, "Runtime/global_destructor_chain.c"),
-            Object(Matching, "Runtime/New.cp", extra_cflags = ["-Cpp_exceptions on"]),
+            Object(NonMatching, "Runtime/New.cp", extra_cflags = ["-Cpp_exceptions on"]),
             Object(Matching, "Runtime/NMWException.cp", extra_cflags = ["-Cpp_exceptions on"]),
             Object(Matching, "Runtime/ptmf.c"),
-            Object(Matching, "Runtime/MWRTTI.cp", extra_cflags = ["-Cpp_exceptions on"]),
+            Object(NonMatching, "Runtime/MWRTTI.cp", extra_cflags = ["-Cpp_exceptions on"]),
             Object(Matching, "Runtime/runtime.c"),
             Object(Matching, "Runtime/__init_cpp_exceptions.cpp"),
             Object(Matching, "Runtime/Gecko_ExceptionPPC.cp", extra_cflags = ["-Cpp_exceptions on"]),
@@ -778,7 +781,7 @@ config.libs = [
             Object(Matching, "MetroTRK/msgbuf.c"),
             Object(Matching, "MetroTRK/msghndlr.c", extra_cflags = ["-str pool"]),
             Object(Matching, "MetroTRK/mslsupp.c"),
-            Object(Matching, "MetroTRK/targimpl.c", extra_cflags = ["-inline auto", "-pool off"]),
+            Object(NonMatching, "MetroTRK/targimpl.c", extra_cflags = ["-inline auto", "-pool off"]),
             Object(Matching, "MetroTRK/target_options.c"),
         ],
     },
@@ -1051,6 +1054,7 @@ config.libs = [
         [   
             "-sdata 0",
             "-sdata2 0",
+            "-RTTI on",
             "-i libs/RVL_SDK/src/revolution/hbm/include/",
         ]
     ),
@@ -1109,7 +1113,7 @@ config.libs = [
     DolphinLib(
         "os",
         [
-            Object(Matching, "revolution/os/OS.c"),
+            Object(NonMatching, "revolution/os/OS.c"),
             Object(Matching, "revolution/os/OSAlarm.c"),
             Object(Matching, "revolution/os/OSAlloc.c"),
             Object(Matching, "revolution/os/OSArena.c"),
