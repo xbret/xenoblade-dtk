@@ -319,12 +319,12 @@ void* operator new(u32 arg0) {
     return 0;
 }
 
-void operator delete(void* p) {
+void operator delete(void* p) throw() {
     mtl::deallocate(p);
 }
 
 
 
-void operator delete[](void* p) {
+void operator delete[](void* p) throw() {
     mtl::deallocate(p);
 }
