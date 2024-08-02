@@ -7,7 +7,7 @@ splits: config/SX4J01/splits.txt
 # (optional) Path to the DOL's .map file.
 # This should only used for initial analysis, and generating the symbols and splits files.
 # Once those files are generated, remove this to avoid conflicts.
-map: orig/SX4J01/files/main.MAP
+#map: orig/SX4J01/files/main.MAP
 
 # (optional) When enabled, function boundary analysis will be skipped.
 # Only valid _after_ initial analysis has been performed and
@@ -38,3 +38,8 @@ symbols_known: true
 # When alignments are fully known (e.g. from a complete map file),
 # this can be set to false.
 fill_gaps: true
+
+# (optional) By default, emitted objects will "export" all symbols (force active).
+# This is useful to prevent the linker from removing any symbols.
+# Individual symbols can be excluded using `noexport` in the symbols file.
+export_all: true

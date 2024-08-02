@@ -2,27 +2,27 @@
 
 See [Dependencies](dependencies.md) first.
 
-Clone this template repository.
+1. [Create a new repository from this template](https://github.com/new?template_name=dtk-template&template_owner=encounter), then clone it.
 
-Rename `orig/GAMEID` to the game's ID. (For example, `GLZE01` for _The Legend of Zelda: The Wind Waker_.)
+2. Rename `orig/GAMEID` to the game's ID. (For example, `GLZE01` for _The Legend of Zelda: The Wind Waker_.)
 
-Extract your game to `orig/[GAMEID]`. In Dolphin, use "Extract Entire Disc" for GameCube games, or use "Data Partition" -> "Extract Entire Partition" for Wii games.
+3. Extract your game to `orig/[GAMEID]`. In Dolphin, use "Extract Entire Disc" for GameCube games, or use "Data Partition" -> "Extract Entire Partition" for Wii games.
 
-Rename `config/GAMEID` to the game's ID and modify `config/[GAMEID]/config.yml` appropriately, using [`config.example.yml`](/config/GAMEID/config.example.yml) as a reference. If the game doesn't use RELs, the `modules` list in `config.yml` can be removed.
+4. Rename `config/GAMEID` to the game's ID and modify `config/[GAMEID]/config.yml` appropriately, using [`config.example.yml`](/config/GAMEID/config.example.yml) as a reference. If the game doesn't use RELs, the `modules` list in `config.yml` can be removed.
 
-Generate a `config/[GAMEID]/build.sha1` file for verification. This file is a list of SHA-1 hashes for each build artifact. One possible way:
+5. Generate a `config/[GAMEID]/build.sha1` file for verification. This file is a list of SHA-1 hashes for each build artifact. One possible way:
 
-```shell
-$ dtk shasum orig/[GAMEID]/sys/main.dol orig/[GAMEID]/files/*.rel > config/[GAMEID]/build.sha1
-```
+    ```sh
+    dtk shasum orig/[GAMEID]/sys/main.dol orig/[GAMEID]/files/*.rel -o config/[GAMEID]/build.sha1
+    ```
 
-Then, modify the paths in `config/[GAMEID]/build.sha1` to point to the `build` directory instead of `orig`. The DOL will be built at `build/[GAMEID]/main.dol`, and modules will be built at `build/[GAMEID]/[module_name]/[module_name].rel`.
+6. Modify the paths in `config/[GAMEID]/build.sha1` to point to the `build` directory instead of `orig`. The DOL will be built at `build/[GAMEID]/main.dol`, and modules will be built at `build/[GAMEID]/[module_name]/[module_name].rel`.
 
-Update `VERSIONS` in [`configure.py`](/configure.py) with the game ID.
+7. Update `VERSIONS` in [`configure.py`](/configure.py) with the game ID.
 
-Run `python configure.py` to generate the initial `build.ninja`.
+8. Run `python configure.py` to generate the initial `build.ninja`.
 
-Run `ninja` to perform initial analysis.
+9. Run `ninja` to perform initial analysis.
 
 If all goes well, the initial `symbols.txt` and `splits.txt` should be automatically generated. Though it's likely it won't build yet. See [Post-analysis](#post-analysis) for next steps.
 
@@ -49,7 +49,7 @@ Often indicated by the following error:
 #   '__init_cpp_exceptions.cpp' both need to be updated to latest version.
 ```
 
-### GC 1.0 - 2.6 linkers:
+### GC 1.0 - 2.6 linkers
 
 ```yaml
 # splits.txt
@@ -62,11 +62,13 @@ Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 
 `.text`:  
 Find the following symbols in `symbols.txt`:
+
 ```
 GetR2__Fv = .text:0x803294EC; // type:function size:0x8 scope:local align:4
 __fini_cpp_exceptions = .text:0x803294F4; // type:function size:0x34 scope:global align:4
 __init_cpp_exceptions = .text:0x80329528; // type:function size:0x40 scope:global align:4
 ```
+
 The split end is the address of `__init_cpp_exceptions` + size.
 
 `.ctors`:  
@@ -79,12 +81,14 @@ If `__fini_cpp_exceptions_reference` is present, it's size 8, otherwise size 4
 
 `.sdata`:  
 Find the following symbol in `symbols.txt`:
+
 ```
 fragmentID = .sdata:0x803F67F0; // type:object size:0x4 scope:local align:4 data:4byte
 ```
+
 The split end includes any inter-TU padding, so it's usually size 8.
 
-### GC 2.7+ and Wii linkers:
+### GC 2.7+ and Wii linkers
 
 ```yaml
 # splits.txt
@@ -98,10 +102,12 @@ Runtime.PPCEABI.H/__init_cpp_exceptions.cpp:
 
 `.text`:  
 Find the following symbols in `symbols.txt`:
+
 ```
 __fini_cpp_exceptions = .text:0x80345C34; // type:function size:0x34 scope:global
 __init_cpp_exceptions = .text:0x80345C68; // type:function size:0x3C scope:global
 ```
+
 The split end is the address of `__init_cpp_exceptions` + size.
 
 `.ctors$10`:  
@@ -118,7 +124,9 @@ Always size 4.
 
 `.sdata`:  
 Find the following symbol in `symbols.txt`:
+
 ```
 fragmentID = .sdata:0x80418CA8; // type:object size:0x4 scope:local data:4byte
 ```
+
 The split end includes any inter-TU padding, so it's usually size 8.

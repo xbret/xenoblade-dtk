@@ -12,8 +12,10 @@ Documentation
 - [Getting Started](docs/getting_started.md)
 - [`symbols.txt`](docs/symbols.md)
 - [`splits.txt`](docs/splits.md)
+- [GitHub Actions](docs/github_actions.md) (new!)
 
 General:
+
 - [Common BSS](docs/common_bss.md)
 - [`.comment` section](docs/comment_section.md)
 
@@ -28,20 +30,26 @@ References
 - [sjiswrap](https://github.com/encounter/sjiswrap) (UTF-8 to Shift JIS wrapper)
 
 Projects using this structure:
+
 - [zeldaret/tww](https://github.com/zeldaret/tww)
+- [zeldaret/oot-gc](https://github.com/zeldaret/oot-gc)
+- [zeldaret/ss](https://github.com/zeldaret/ss)
 - [PrimeDecomp/prime](https://github.com/PrimeDecomp/prime)
 - [PrimeDecomp/echoes](https://github.com/PrimeDecomp/echoes)
 - [DarkRTA/rb3](https://github.com/DarkRTA/rb3)
-- [InputEvelution/sadx-dtk](https://github.com/InputEvelution/sadx-dtk)
+- [doldecomp/melee](https://github.com/doldecomp/melee)
+- [doldecomp/sadx](https://github.com/doldecomp/sadx)
 - [InputEvelution/wp](https://github.com/InputEvelution/wp)
-- [lepelog/ss-dtk](https://github.com/lepelog/ss-dtk)
 - [NWPlayer123/AnimalCrossing-dtk](https://github.com/NWPlayer123/AnimalCrossing-dtk)
-- [Rainchus/mp4-dtk](https://github.com/Rainchus/mp4-dtk)
+- [Rainchus/marioparty4](https://github.com/Rainchus/marioparty4)
 - [Rainchus/ttyd_dtk](https://github.com/Rainchus/ttyd_dtk)
 - [Sage-of-Mirrors/zmansion](https://github.com/Sage-of-Mirrors/zmansion)
+- [bfbbdecomp/bfbb](https://github.com/bfbbdecomp/bfbb)
+- [EstexNT/rhf-dtk](https://github.com/EstexNT/rhf-dtk)
 
 Features
 --------
+
 - Few external dependencies: Just `python` for the generator and `ninja` for the build system. See [Dependencies](docs/dependencies.md).
 - Simple configuration: Everything lives in `config.yml`, `symbols.txt`, and `splits.txt`.
 - Multi-version support: Separate configurations for each game version, and a `configure.py --version` flag to switch between them.
@@ -50,7 +58,7 @@ Features
 - No manual assembly: decomp-toolkit handles splitting the DOL into relocatable objects based on the configuration. No game assets are committed to the repository.
 - Progress calculation and upload script for [frogress](https://github.com/decompals/frogress).
 - Integration with [objdiff](https://github.com/encounter/objdiff) for a diffing workflow.
-- (TODO) CI workflow template for GitHub Actions.
+- CI workflow template for GitHub Actions.
 
 Project structure
 -----------------
@@ -66,6 +74,7 @@ Project structure
 - `tools/` - Scripts shared between projects.
 
 Temporary, delete when done:
+
 - `config/GAMEID/config.example.yml` - Example configuration file and documentation.
 - `docs/` - Documentation for decomp-toolkit configuration.
 - `README.md` - This file, replace with your own. For a template, see [`README.example.md`](README.example.md).
