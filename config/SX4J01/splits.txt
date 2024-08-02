@@ -3182,7 +3182,7 @@ MSL_C/MSL_Common_Embedded/Math/Double_precision/w_sqrt.c:
 MSL_C/MSL_Common/extras.c:
 	.text       start:0x802CB46C end:0x802CB50C
 
-MetroTRK/targsupp.c:
+MetroTRK/targsupp.s:
 	.text       start:0x802CB50C end:0x802CB52C
 
 MetroTRK/custconn/cc_gdev.c:
@@ -3190,7 +3190,7 @@ MetroTRK/custconn/cc_gdev.c:
 	.bss        start:0x8057B368 end:0x8057B888
 	.sbss       start:0x80667560 end:0x80667568
 
-MetroTRK/custconn/MWCriticalSection_gc.c:
+MetroTRK/custconn/MWCriticalSection_gc.cpp:
 	.text       start:0x802CB7A4 end:0x802CB7E0
 
 MetroTRK/custconn/CircleBuffer.c:
@@ -3284,12 +3284,12 @@ MetroTRK/target_options.c:
 	.text       start:0x802D05C4 end:0x802D05D4
 	.sbss       start:0x806675A8 end:0x806675B0
 
-DebuggerDriver.cpp:
+DebuggerDriver.c:
 	.text       start:0x802D05D4 end:0x802D0908
 	.sdata      start:0x80665898 end:0x806658A0
 	.sbss       start:0x806675B0 end:0x806675C8
 
-exi2.cpp:
+exi2.c:
 	.text       start:0x802D0908 end:0x802D10A0
 
 revolution/ai/ai.c:
