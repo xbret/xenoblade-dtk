@@ -14,6 +14,7 @@ u32 regionIndex2;
 bool lbl_80665E38;
 bool lbl_80665E39;
 s32 lbl_80667E50;
+BOOL lbl_80667E58;
 
 
 
@@ -104,14 +105,14 @@ void MemManager_setArenaMemorySize(u32 val, bool b){
 //requires func_align 4
 MemBlock* MemManager_804339B8(Heap* heap, MemBlock* arg1) {
     MemBlock* entryTemp = arg1;
-    MemBlock* tempEntry1 = entryTemp->unk8;
+    MemBlock* tempEntry1 = entryTemp->next;
     
     if (tempEntry1 != entryTemp) {
         memmove((void*)tempEntry1, entryTemp, sizeof(MemBlock));
         entryTemp = tempEntry1;
     }
     
-    entryTemp->unk8 = MemBlock::dummy(); //set the pointer to a random known value
+    entryTemp->next = (MemBlock*)MemBlock::dummyDataPtr(); //set the pointer to a random known value
     MemBlock* currentEntry = heap->head;
 
     //Go to the end of the list
@@ -261,11 +262,6 @@ u32 MemManager_804348C0(u8* arg0, u32 arg1) {
     return (var_r5 >> 8) & 0xFFFF;
 }
 
-//dummy operator new
-void* operator new(u32 arg0) {
-    return 0;
-}
-
 static inline void deallocate(void* p){
     if(p != nullptr){
         if(regionIndex1 != -1){
@@ -312,6 +308,11 @@ static inline void deallocate(void* p){
     }
 }
 
+}
+
+//dummy operator new
+void* operator new(u32 arg0) {
+    return 0;
 }
 
 void operator delete(void* p) {
