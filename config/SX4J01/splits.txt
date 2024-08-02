@@ -2872,6 +2872,7 @@ Runtime/global_destructor_chain.c:
 	.sbss       start:0x80667520 end:0x80667528
 
 Runtime/New.cp:
+	.text       start:0x802B96FC end:0x802B96FC
 	.rodata     start:0x8050CE00 end:0x8050CE10
 	.sdata      start:0x80665858 end:0x80665860
 
