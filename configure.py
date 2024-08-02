@@ -177,7 +177,7 @@ cflags_base = [
     "-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
-    "-fp_contract on",
+    #"-fp_contract on",
    #"-str reuse",
     "-enc SJIS",
     "-I-",
@@ -208,6 +208,7 @@ cflags_game = [
     "-str reuse,pool,readonly",
     "-RTTI on",
     "-Cpp_exceptions on",
+    "-func_align 4",
 ]
 
 # Metrowerks library flags
@@ -216,6 +217,7 @@ cflags_runtime = [
     "-use_lmw_stmw on",
     "-str reuse,pool,readonly",
     "-inline on",
+    "-func_align 4",
 ]
 
 cflags_mslc = [
@@ -224,12 +226,14 @@ cflags_mslc = [
     "-str reuse,pool,readonly",
     "-inline on",
     "-ipa file",
+    "-func_align 4",
 ]
 
 cflags_trk = [
     *cflags_base,
     "-use_lmw_stmw on",
     "-inline on",
+    "-func_align 4",
 ]
 
 # Dolphin library flags
@@ -245,6 +249,7 @@ cflags_ndev = [
     *cflags_base,
     "-inline auto",
     "-ipa file",
+    "-func_align 4",
 ]
 
 
@@ -253,6 +258,7 @@ cflags_nw4r = [
     *cflags_base,
     "-inline auto",
     "-use_lmw_stmw on",
+    "-func_align 4",
 ]
 
 # Criware flags
@@ -262,6 +268,7 @@ cflags_criware = [
     "-sdata2 0",
     "-use_lmw_stmw on",
     "-i libs/CriWare/src/",
+    "-func_align 4",
 ]
 
 # Helper function for Dolphin libraries
@@ -649,7 +656,7 @@ config.libs = [
         "objects": [
             Object(Matching, "Runtime/__mem.c"),
             Object(Matching, "Runtime/__va_arg.c"),
-            Object(Matching, "Runtime/global_destructor_chain.c",  extra_cflags = ["-Cpp_exceptions on"]),
+            Object(Matching, "Runtime/global_destructor_chain.c"),
             Object(Matching, "Runtime/New.cp", extra_cflags = ["-Cpp_exceptions on"]),
             Object(Matching, "Runtime/NMWException.cp", extra_cflags = ["-Cpp_exceptions on"]),
             Object(Matching, "Runtime/ptmf.c"),
