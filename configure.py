@@ -151,7 +151,7 @@ config.asflags = [
 config.linker_console = "Wii"
 config.linker_version = "1.1"
 config.ldflags = [
-    "-fp hardware",
+    "-fp fmadd",
     "-nodefaults",
     "-warn off",
     # "-listclosure", # Uncomment for Wii linkers
@@ -164,23 +164,22 @@ config.reconfig_deps = []
 cflags_base = [
     "-nodefaults",
     "-proc gekko",
-    "-align powerpc",
+    #"-align powerpc",
     "-enum int",
-    "-fp hardware",
+    "-fp hard",
     "-Cpp_exceptions off",
     "-lang=c99", #TODO: add c99 lang flag on per lib basis
     # "-W all",
     "-O4,p",
     "-inline auto",
-    '-pragma "cats off"',
-    '-pragma "warn_notinlined off"',
-    "-maxerrors 1",
+    #'-pragma "cats off"',
+    #'-pragma "warn_notinlined off"',
+    #"-maxerrors 1",
     "-nosyspath",
     "-RTTI off",
     #"-fp_contract on",
    #"-str reuse",
     "-enc SJIS",
-    "-I-",
     "-i include",
     "-i libs/RVL_SDK/include/",
     "-i libs/PowerPC_EABI_Support/include/stl",
