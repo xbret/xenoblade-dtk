@@ -8,4 +8,4 @@ force_active: []
 
 mw_comment_version: 15 # Wii Linker 1.1
 symbols_known: true # Very fast analysis
-fill_gaps: true # Alignments known
+fill_gaps: false # Alignments known
