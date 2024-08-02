@@ -43,7 +43,7 @@ parser.add_argument(
     "-v",
     "--version",
     choices=VERSIONS,
-    type=str.upper,
+    type=str.lower,
     default=VERSIONS[DEFAULT_VERSION],
     help="version to build",
 )
