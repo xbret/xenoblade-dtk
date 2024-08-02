@@ -3,6 +3,7 @@
 /*Compiled with the ec++ flag? without it the compiler requires throw()
 to be added for the operators, which messes them up*/
 
+
 namespace mtl{
 
 Heap heapArray[80]; 
@@ -262,6 +263,8 @@ u32 MemManager_804348C0(u8* arg0, u32 arg1) {
     }
     return (var_r5 >> 8) & 0xFFFF;
 }
+
+extern void log(bool status);
 
 static inline void deallocate(void* p){
     if(p != nullptr){
