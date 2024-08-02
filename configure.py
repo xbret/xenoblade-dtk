@@ -148,7 +148,8 @@ config.asflags = [
     f"-I build/{config.version}/include",
     f"--defsym version={version_num}",
 ]
-config.linker_version = "Wii/1.1"
+config.linker_console = "Wii"
+config.linker_version = "1.1"
 config.ldflags = [
     "-fp hardware",
     "-nodefaults",
@@ -176,9 +177,17 @@ cflags_base = [
     "-nosyspath",
     "-RTTI off",
     "-fp_contract on",
-    "-str reuse",
+   #"-str reuse",
     "-enc SJIS",
+    "-I-",
     "-i include",
+    "-i libs/RVL_SDK/include/",
+    "-i libs/PowerPC_EABI_Support/include/stl",
+    "-i libs/nw4r/include/",
+    "-i libs/monolib/include/",
+    "-i src/",
+    "-i libs/NdevExi2A/include/",
+    "-i libs/PowerPC_EABI_Support/include/",
     f"-i build/{config.version}/include",
     f"-DVERSION={version_num}",
 ]
@@ -189,23 +198,79 @@ if config.debug:
 else:
     cflags_base.append("-DNDEBUG=1")
 
+# Game/Monolithlib Flags
+cflags_game = [
+    *cflags_base,
+    "-ipa file",
+    "-inline auto",
+    "-use_lmw_stmw on",
+    "-str reuse,pool,readonly",
+    "-RTTI on",
+    "-Cpp_exceptions on",
+]
+
 # Metrowerks library flags
 cflags_runtime = [
     *cflags_base,
     "-use_lmw_stmw on",
     "-str reuse,pool,readonly",
-    "-gccinc",
-    "-common off",
+    "-inline on",
+]
+
+cflags_mslc = [
+    *cflags_base,
+    "-use_lmw_stmw on",
+    "-str reuse,pool,readonly",
+    "-inline on",
+    "-ipa file",
+]
+
+cflags_trk = [
+    *cflags_base,
+    "-use_lmw_stmw on",
+    "-inline on",
+]
+
+# Dolphin library flags
+cflags_sdk = [
+    *cflags_base,
     "-inline auto",
+    "-ipa file",
+    "-func_align 16",
+]
+
+# Ndev flags
+cflags_ndev = [
+    *cflags_base,
+    "-inline auto",
+    "-ipa file",
 ]
 
 
+# nw4r flags
+cflags_nw4r = [
+    *cflags_base,
+    "-inline auto",
+    "-use_lmw_stmw on",
+]
+
+# Criware flags
+cflags_criware = [
+    *cflags_base,
+    "-sdata 0",
+    "-sdata2 0",
+    "-use_lmw_stmw on",
+    "-i libs/CriWare/src/",
+]
+
 # Helper function for Dolphin libraries
-def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
+def DolphinLib(lib_name: str, objects: List[Object], extra_cflags=[]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
-        "mw_version": "Wii/1.0",
-        "cflags": cflags_dolphin,
+        "mw_console": "Wii",
+        "mw_version": "1.1",
+        "root_dir": "libs/RVL_SDK",
+        "cflags": cflags_sdk + extra_cflags,
         "host": False,
         "objects": objects,
     }
@@ -213,7 +278,9 @@ def DolphinLib(lib_name: str, objects: List[Object]) -> Dict[str, Any]:
 def criwareLib(lib_name, objects, extra_cflags=[]):
     return {
         "lib": lib_name,
-        "mw_version": "GC/3.0",
+        "mw_console": "GC",
+        "mw_version": "3.0",
+        "root_dir": "libs/CriWare",
         "cflags": cflags_criware + extra_cflags,
         "host": False,
         "objects": objects,
@@ -222,7 +289,9 @@ def criwareLib(lib_name, objects, extra_cflags=[]):
 def nw4rLib(lib_name, objects, extra_cflags=[]):
     return {
         "lib": lib_name,
-        "mw_version": "GC/3.0",
+        "mw_console": "GC",
+        "mw_version": "3.0",
+        "root_dir": "libs/nw4r",
         "cflags": cflags_nw4r + extra_cflags,
         "host": False,
         "objects": objects,
@@ -241,7 +310,7 @@ config.libs = [
         "mw_console": "Wii",
         "mw_version": "1.1",
         "root_dir": "",
-        "cflags": "$cflags_base -ipa file -str pool,readonly,reuse -RTTI on -enc SJIS",
+        "cflags": cflags_game,
         "host": True,
         "objects": [
             Object(NonMatching, "kyoshin/appgame/CGame"),
@@ -574,7 +643,7 @@ config.libs = [
         "mw_console": "Wii",
         "mw_version": "1.1",
         "root_dir": "libs/PowerPC_EABI_Support",
-        "cflags": "$cflags_base -Cpp_exceptions off -inline on -proc gekko -fp hard -O4,p -str pool,readonly,reuse -func_align 4",
+        "cflags": cflags_runtime,
         "host": True,
         "objects": [
             Object(Matching, "Runtime/__mem"),
@@ -595,7 +664,7 @@ config.libs = [
         "mw_console": "Wii",
         "mw_version": "1.1",
         "root_dir": "libs/PowerPC_EABI_Support",
-        "cflags": "$cflags_base -Cpp_exceptions off -inline on -str pool,readonly,reuse -ipa file",
+        "cflags": cflags_mslc,
         "host": True,
         "objects": [
             Object(Matching, "MSL_C/MSL_Common/alloc"),
@@ -675,7 +744,7 @@ config.libs = [
         "mw_console": "Wii",
         "mw_version": "1.0",
         "root_dir": "libs/PowerPC_EABI_Support",
-        "cflags": "$cflags_base -Cpp_exceptions off -inline on",
+        "cflags": cflags_trk,
         "host": True,
         "objects": [
             Object(Matching, "MetroTRK/__exception"),
@@ -711,43 +780,28 @@ config.libs = [
         "mw_console": "GC",
         "mw_version": "3.0",
         "root_dir": "libs/NdevExi2A",
-        "cflags": "$cflags_base -use_lmw_stmw off -inline auto -ipa file -Cpp_exceptions off",
+        "cflags": cflags_ndev,
         "host": True,
         "objects": [
             Object(Matching, "DebuggerDriver"),
             Object(Matching, "exi2"),
         ],
     },
-    {
-        "lib": "ai",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    DolphinLib(
+        "ai",
+        [
             Object(Matching, "revolution/ai/ai"),
         ],
-    },
-    {
-        "lib": "arc",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "arc",
+        [
             Object(Matching, "revolution/arc/arc"),
         ],
-    },
-    {
-        "lib": "ax",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "ax",
+        [
             Object(Matching, "revolution/ax/AX"),
             Object(NonMatching, "revolution/ax/AXAlloc"),
             Object(NonMatching, "revolution/ax/AXAux"),
@@ -759,15 +813,10 @@ config.libs = [
             Object(Matching, "revolution/ax/AXComp"),
             Object(Matching, "revolution/ax/DSPCode"),
         ],
-    },
-    {
-        "lib": "axfx",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "axfx",
+        [
             Object(NonMatching, "revolution/axfx/AXFXReverbHi"),
             Object(NonMatching, "revolution/axfx/AXFXReverbHiExp"),
             Object(NonMatching, "revolution/axfx/AXFXDelayExp"),
@@ -780,26 +829,16 @@ config.libs = [
             Object(Matching, "revolution/axfx/AXFXSrcCoef"),
             Object(Matching, "revolution/axfx/AXFXHooks"),
         ],
-    },
-    {
-        "lib": "base",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "base",
+        [
             Object(Matching, "revolution/base/PPCArch"),
         ],
-    },
-    {
-        "lib": "bte",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_base -Cpp_exceptions off -enum int -inline auto -ipa file",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "bte",
+        [
             Object(NonMatching, "revolution/bte/gki/gki_buffer"),
             Object(NonMatching, "revolution/bte/gki/gki_time"),
             Object(NonMatching, "revolution/bte/gki/gki_ppc"),
@@ -869,52 +908,32 @@ config.libs = [
             Object(NonMatching, "revolution/bte/stack/sdp/sdp_server"),
             Object(NonMatching, "revolution/bte/stack/sdp/sdp_utils"),
         ],
-    },
-    {
-        "lib": "cx",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "cx",
+        [
             Object(NonMatching, "revolution/cx/CXStreamingUncompression"),
             Object(NonMatching, "revolution/cx/CXUncompression"),
             Object(Matching, "revolution/cx/CXSecureUncompression"),
         ],
-    },
-    {
-        "lib": "db",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "db",
+        [
             Object(Matching, "revolution/db/db"),
         ],
-    },
-    {
-        "lib": "dsp",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "dsp",
+        [
             Object(Matching, "revolution/dsp/dsp"),
             Object(Matching, "revolution/dsp/dsp_debug"),
             Object(Matching, "revolution/dsp/dsp_task"),
         ],
-    },
-    {
-        "lib": "dvd",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "dvd",
+        [
             Object(Matching, "revolution/dvd/dvdfs"),
             Object(Matching, "revolution/dvd/dvd"),
             Object(Matching, "revolution/dvd/dvdqueue"),
@@ -924,73 +943,43 @@ config.libs = [
             Object(Matching, "revolution/dvd/dvdDeviceError"),
             Object(Matching, "revolution/dvd/dvd_broadway"),
         ],
-    },
-    {
-        "lib": "enc",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "enc",
+        [
             Object(NonMatching, "revolution/enc/encutility"),
             Object(NonMatching, "revolution/enc/encjapanese"),
         ],
-    },
-    {
-        "lib": "esp",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "esp",
+        [
             Object(Matching, "revolution/esp/esp"),
         ],
-    },
-    {
-        "lib": "euart",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "euart",
+        [
             Object(Matching, "revolution/euart/euart"),
         ],
-    },
-    {
-        "lib": "exi",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "exi",
+        [
             Object(NonMatching, "revolution/exi/EXIBios"),
             Object(Matching, "revolution/exi/EXIUart"),
             Object(Matching, "revolution/exi/EXICommon"),
         ],
-    },
-    {
-        "lib": "fs",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "fs",
+        [
             Object(Matching, "revolution/fs/fs"),
         ],
-    },
-    {
-        "lib": "gx",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "gx",
+        [
             Object(NonMatching, "revolution/gx/GXInit"),
             Object(NonMatching, "revolution/gx/GXFifo"),
             Object(NonMatching, "revolution/gx/GXAttr"),
@@ -1006,15 +995,10 @@ config.libs = [
             Object(Matching, "revolution/gx/GXTransform"),
             Object(NonMatching, "revolution/gx/GXPerf"),
         ],
-    },
-    {
-        "lib": "homebuttonLib",
-        "mw_console": "Wii",
-        "mw_version": "1.0",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk -sdata 0 -sdata2 0 -i libs/RVL_SDK/src/revolution/hbm/include/",
-        "host": True,
-        "objects": [
+    ),
+    DolphinLib(
+        "homebuttonLib",
+        [
             Object(NonMatching, "revolution/hbm/HBMFrameController"),
             Object(NonMatching, "revolution/hbm/HBMAnmController"),
             Object(NonMatching, "revolution/hbm/HBMGUIManager"),
@@ -1057,97 +1041,67 @@ config.libs = [
             Object(NonMatching, "revolution/hbm/synvoice"),
             Object(NonMatching, "revolution/hbm/seq"),
         ],
-    },
-    {
-        "lib": "ipc",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": True,
-        "objects": [
+        [   
+            "-sdata 0",
+            "-sdata2 0",
+            "-i libs/RVL_SDK/src/revolution/hbm/include/",
+        ]
+    ),
+    DolphinLib(
+        "ipc",
+        [
             Object(Matching, "revolution/ipc/ipcMain"),
             Object(NonMatching, "revolution/ipc/ipcclt"),
             Object(NonMatching, "revolution/ipc/memory"),
             Object(Matching, "revolution/ipc/ipcProfile"),
         ],
-    },
-    {
-        "lib": "kpad",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "kpad",
+        [
             Object(NonMatching, "revolution/kpad/KPAD"),
         ],
-    },
-    {
-        "lib": "mem",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "mem",
+        [
             Object(Matching, "revolution/mem/mem_heapCommon"),
             Object(NonMatching, "revolution/mem/mem_expHeap"),
             Object(Matching, "revolution/mem/mem_frameHeap"),
             Object(Matching, "revolution/mem/mem_allocator"),
             Object(Matching, "revolution/mem/mem_list"),
         ],
-    },
-    {
-        "lib": "mix",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "mix",
+        [
             Object(NonMatching, "revolution/mix/mix"),
             Object(NonMatching, "revolution/mix/remote"),
         ],
-    },
-    {
-        "lib": "mtx",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "mtx",
+        [
             Object(Matching, "revolution/mtx/mtx"),
             Object(Matching, "revolution/mtx/mtxvec"),
             Object(Matching, "revolution/mtx/mtx44"),
             Object(Matching, "revolution/mtx/vec"),
             Object(Matching, "revolution/mtx/quat"),
         ],
-    },
-    {
-        "lib": "nand",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "nand",
+        [
             Object(NonMatching, "revolution/nand/nand"),
             Object(NonMatching, "revolution/nand/NANDOpenClose"),
             Object(NonMatching, "revolution/nand/NANDCore"),
             Object(NonMatching, "revolution/nand/NANDCheck"),
             Object(NonMatching, "revolution/nand/NANDLogging"),
         ],
-    },
-    {
-        "lib": "os",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "os",
+        [
             Object(Matching, "revolution/os/OS"),
             Object(Matching, "revolution/os/OSAlarm"),
             Object(Matching, "revolution/os/OSAlloc"),
@@ -1183,125 +1137,75 @@ config.libs = [
             Object(NonMatching, "revolution/os/OSLaunch"),
             Object(Matching, "revolution/os/__ppc_eabi_init"),
         ],
-    },
-    {
-        "lib": "pad",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "pad",
+        [
             Object(Matching, "revolution/pad/Pad"),
         ],
-    },
-    {
-        "lib": "sc",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "sc",
+        [
             Object(NonMatching, "revolution/sc/scsystem"),
             Object(Matching, "revolution/sc/scapi"),
             Object(Matching, "revolution/sc/scapi_prdinfo"),
         ],
-    },
-    {
-        "lib": "si",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "si",
+        [
             Object(NonMatching, "revolution/si/SIBios"),
             Object(Matching, "revolution/si/SISamplingRate"),
         ],
-    },
-    {
-        "lib": "tpl",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "tpl",
+        [
             Object(Matching, "revolution/tpl/TPL"),
         ],
-    },
-    {
-        "lib": "usb",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "usb",
+        [
             Object(Matching, "revolution/usb/usb"),
         ],
-    },
-    {
-        "lib": "vi",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "vi",
+        [
             Object(NonMatching, "revolution/vi/vi"),
             Object(NonMatching, "revolution/vi/i2c"),
             Object(NonMatching, "revolution/vi/vi3in1"),
         ],
-    },
-    {
-        "lib": "wenc",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "wenc",
+        [
             Object(NonMatching, "revolution/wenc/wenc"),
         ],
-    },
-    {
-        "lib": "wpad",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "wpad",
+        [
             Object(NonMatching, "revolution/wpad/WPAD"),
             Object(NonMatching, "revolution/wpad/WPADHIDParser"),
             Object(NonMatching, "revolution/wpad/WPADEncrypt"),
             Object(NonMatching, "revolution/wpad/WPADMem"),
             Object(Matching, "revolution/wpad/debug_msg"),
         ],
-    },
-    {
-        "lib": "wud",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/RVL_SDK",
-        "cflags": "$cflags_sdk",
-        "host": False,
-        "objects": [
+    ),
+    DolphinLib(
+        "wud",
+        [
             Object(NonMatching, "revolution/wud/WUD"),
             Object(NonMatching, "revolution/wud/WUDHidHost"),
             Object(Matching, "revolution/wud/debug_msg"),
         ],
-    },
-    {
-        "lib": "libadxwii",
-        "mw_console": "GC",
-        "mw_version": "3.0",
-        "root_dir": "libs/CriWare",
-        "cflags": "$cflags_criware",
-        "host": False,
-        "objects": [
+    ),
+    criwareLib(
+        "libadxwii",
+        [
             Object(NonMatching, "adx/adxf/adx_fini"),
             Object(NonMatching, "adx/adxf/adx_fs"),
             Object(Matching, "adx/adxf/adx_fcch"),
@@ -1367,15 +1271,10 @@ config.libs = [
             Object(NonMatching, "adx/adxt/srcwii/adx_rnawii"),
             Object(NonMatching, "adx/std/cri_crw_std"),
         ],
-    },
-    {
-        "lib": "libmwsfdwii",
-        "mw_console": "Wii",
-        "mw_version": "1.1",
-        "root_dir": "libs/CriWare",
-        "cflags": "$cflags_criware",
-        "host": False,
-        "objects": [
+    ),
+    criwareLib(
+        "libmwsfdwii",
+        [
             Object(NonMatching, "sofdec/cft/srcgc/cftyp422_ppc"),
             Object(NonMatching, "sofdec/cft/cft_common"),
             Object(NonMatching, "sofdec/mwply/mwsfdfrm"),
@@ -1463,27 +1362,17 @@ config.libs = [
             Object(NonMatching, "sofdec/sfx/sfx_cnv_to_Y84C44"),
             Object(NonMatching, "sofdec/sud/sud_lib"),
         ],
-    },
-    {
-        "lib": "libnw4r_db",
-        "mw_console": "GC",
-        "mw_version": "3.0",
-        "root_dir": "libs/nw4r",
-        "cflags": "$cflags_nw4r",
-        "host": False,
-        "objects": [
+    ),
+    nw4rLib(
+        "libnw4r_db",
+        [
             Object(NonMatching, "db/db_console"),
             Object(NonMatching, "db/db_assert"),
         ],
-    },
-    {
-        "lib": "libnw4r_g3d",
-        "mw_console": "GC",
-        "mw_version": "3.0",
-        "root_dir": "libs/nw4r",
-        "cflags": "$cflags_nw4r",
-        "host": False,
-        "objects": [
+    ),
+    nw4rLib(
+        "libnw4r_g3d",
+        [
             Object(NonMatching, "g3d/res/g3d_rescommon"),
             Object(NonMatching, "g3d/res/g3d_resdict"),
             Object(NonMatching, "g3d/res/g3d_resfile"),
@@ -1541,15 +1430,10 @@ config.libs = [
             Object(NonMatching, "g3d/g3d_light"),
             Object(NonMatching, "g3d/g3d_calcvtx"),
         ],
-    },
-    {
-        "lib": "libnw4r_lyt",
-        "mw_console": "GC",
-        "mw_version": "3.0",
-        "root_dir": "libs/nw4r",
-        "cflags": "$cflags_nw4r",
-        "host": False,
-        "objects": [
+    ),
+    nw4rLib(
+        "libnw4r_lyt",
+        [
             Object(Matching, "lyt/lyt_init"),
             Object(NonMatching, "lyt/lyt_pane"),
             Object(NonMatching, "lyt/lyt_group"),
@@ -1567,29 +1451,19 @@ config.libs = [
             Object(NonMatching, "lyt/lyt_common"),
             Object(NonMatching, "lyt/lyt_util"),
         ],
-    },
-    {
-        "lib": "libnw4r_math",
-        "mw_console": "GC",
-        "mw_version": "3.0",
-        "root_dir": "libs/nw4r",
-        "cflags": "$cflags_nw4r",
-        "host": False,
-        "objects": [
+    ),
+    nw4rLib(
+        "libnw4r_math",
+        [
             Object(NonMatching, "math/math_arithmetic"),
             Object(NonMatching, "math/math_triangular"),
             Object(NonMatching, "math/math_types"),
             Object(NonMatching, "math/math_geometry"),
         ],
-    },
-    {
-        "lib": "libnw4r_snd",
-        "mw_console": "GC",
-        "mw_version": "3.0",
-        "root_dir": "libs/nw4r",
-        "cflags": "$cflags_nw4r",
-        "host": False,
-        "objects": [
+    ),
+    nw4rLib(
+        "libnw4r_snd",
+        [
             Object(NonMatching, "snd/snd_AxManager"),
             Object(NonMatching, "snd/snd_AxVoice"),
             Object(NonMatching, "snd/snd_AxVoiceManager"),
@@ -1648,15 +1522,10 @@ config.libs = [
             Object(NonMatching, "snd/snd_WsdPlayer"),
             Object(Matching, "snd/snd_adpcm"),
         ],
-    },
-    {
-        "lib": "libnw4r_ut",
-        "mw_console": "GC",
-        "mw_version": "3.0",
-        "root_dir": "libs/nw4r",
-        "cflags": "$cflags_nw4r",
-        "host": False,
-        "objects": [
+    ),
+    nw4rLib(
+        "libnw4r_ut",
+        [
             Object(Matching, "ut/ut_LinkList"),
             Object(Matching, "ut/ut_binaryFileFormat"),
             Object(Matching, "ut/ut_CharStrmReader"),
@@ -1673,13 +1542,13 @@ config.libs = [
             Object(NonMatching, "ut/ut_CharWriter"),
             Object(NonMatching, "ut/ut_TextWriterBase"),
         ],
-    },
+    ),
     {
         "lib": "monolib",
         "mw_console": "Wii",
         "mw_version": "1.1",
         "root_dir": "libs/monolib",
-        "cflags": "$cflags_base -ipa file -inline auto -str pool,readonly,reuse -RTTI on -enc SJIS",
+        "cflags": cflags_game,
         "host": True,
         "objects": [
             Object(NonMatching, "CAttrTransform"),

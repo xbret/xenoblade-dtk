@@ -41,7 +41,9 @@ class Object:
             "extra_asflags": None,
             "cflags": None,
             "extra_cflags": None,
+            "mw_console": None,
             "mw_version": None,
+            "root_dir": None,
             "shift_jis": None,
             "source": name,
         }
@@ -80,6 +82,7 @@ class ProjectConfig:
         self.asflags: Optional[List[str]] = None  # Assembler flags
         self.ldflags: Optional[List[str]] = None  # Linker flags
         self.libs: Optional[List[Dict[str, Any]]] = None  # List of libraries
+        self.linker_console: Optional[str] = None #mwld console
         self.linker_version: Optional[str] = None  # mwld version
         self.version: Optional[str] = None  # Version name
         self.warn_missing_config: bool = False  # Warn on missing unit configuration
@@ -117,6 +120,7 @@ class ProjectConfig:
             "check_sha_path",
             "config_path",
             "ldflags",
+            "linker_console",
             "linker_version",
             "libs",
             "version",
@@ -219,8 +223,11 @@ def generate_build_ninja(
     if config.debug:
         ldflags += " -g"
     n.variable("ldflags", ldflags)
+    if not config.linker_console:
+        sys.exit("ProjectConfig.linker_console missing")
     if not config.linker_version:
         sys.exit("ProjectConfig.linker_version missing")
+    n.variable("mw_console", Path(config.linker_console))
     n.variable("mw_version", Path(config.linker_version))
     n.newline()
 
@@ -364,7 +371,7 @@ def generate_build_ninja(
     ###
     # Build rules
     ###
-    compiler_path = compilers / "$mw_version"
+    compiler_path = compilers / "$mw_console" / "$mw_version"
 
     # MWCC
     mwcc = compiler_path / "mwcceppc.exe"
@@ -572,7 +579,7 @@ def generate_build_ninja(
             if options["extra_cflags"] is not None:
                 extra_cflags_str = make_flags_str(options["extra_cflags"])
                 cflags_str += " " + extra_cflags_str
-            used_compiler_versions.add(options["mw_version"])
+            used_compiler_versions.add((options["mw_console"], options["mw_version"]))
 
             src_obj_path = build_src_path / f"{obj.base_name}.o"
             src_base_path = build_src_path / obj.base_name
@@ -593,6 +600,7 @@ def generate_build_ninja(
                 rule="mwcc_sjis" if shift_jis else "mwcc",
                 inputs=src_path,
                 variables={
+                    "mw_console": Path(options["mw_console"]),
                     "mw_version": Path(options["mw_version"]),
                     "cflags": cflags_str,
                     "basedir": os.path.dirname(src_base_path),
@@ -684,12 +692,13 @@ def generate_build_ninja(
                 if value is not None or key not in options:
                     options[key] = value
 
-            unit_src_path = Path(lib.get("src_dir", config.src_dir)) / options["source"]
+            root_dir = lib["root_dir"]
+            unit_src_path = root_dir / Path(lib.get("src_dir", config.src_dir)) / options["source"]
 
             unit_asm_path: Optional[Path] = None
             if config.asm_dir is not None:
                 unit_asm_path = (
-                    Path(lib.get("asm_dir", config.asm_dir)) / options["source"]
+                    root_dir / Path(lib.get("asm_dir", config.asm_dir)) / options["source"]
                 ).with_suffix(".s")
 
             link_built_obj = obj.completed
@@ -750,13 +759,13 @@ def generate_build_ninja(
         n.newline()
 
         # Check if all compiler versions exist
-        for mw_version in used_compiler_versions:
-            mw_path = compilers / mw_version / "mwcceppc.exe"
+        for (mw_console, mw_version) in used_compiler_versions:
+            mw_path = compilers / mw_console / mw_version / "mwcceppc.exe"
             if config.compilers_path and not os.path.exists(mw_path):
                 sys.exit(f"Compiler {mw_path} does not exist")
 
         # Check if linker exists
-        mw_path = compilers / str(config.linker_version) / "mwldeppc.exe"
+        mw_path = compilers / str(config.linker_console) / str(config.linker_version) / "mwldeppc.exe"
         if config.compilers_path and not os.path.exists(mw_path):
             sys.exit(f"Linker {mw_path} does not exist")
 
@@ -1068,13 +1077,14 @@ def generate_objdiff_config(
             return
 
         lib, obj = result
-        src_dir = Path(lib.get("src_dir", config.src_dir))
 
         # Use object options, then library options
         options = lib.copy()
         for key, value in obj.options.items():
             if value is not None or key not in options:
                 options[key] = value
+
+        src_dir = options["root_dir"] / Path(lib.get("src_dir", config.src_dir))
 
         unit_src_path = src_dir / str(options["source"])
 
@@ -1112,9 +1122,9 @@ def generate_objdiff_config(
         unit_config["base_path"] = src_obj_path
         unit_config["reverse_fn_order"] = reverse_fn_order
         unit_config["complete"] = obj.completed
-        compiler_version = COMPILER_MAP.get(options["mw_version"])
+        compiler_version = COMPILER_MAP.get(options["mw_console"] / options["mw_version"])
         if compiler_version is None:
-            print(f"Missing scratch compiler mapping for {options['mw_version']}")
+            print(f"Missing scratch compiler mapping for {options["mw_console"] / options['mw_version']}")
         else:
             cflags_str = make_flags_str(cflags)
             if options["extra_cflags"] is not None:
