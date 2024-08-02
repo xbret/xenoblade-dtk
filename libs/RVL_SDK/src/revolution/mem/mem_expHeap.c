@@ -120,6 +120,7 @@ static MEMiHeapHead* InitExpHeap_(MEMiHeapHead* heap, void* end, u16 opt) {
     return heap;
 }
 
+/*
 #ifndef NON_MATCHING
 #error AllocUsedBlockFromFreeBlock_ has not yet been matched.
 #endif
@@ -215,6 +216,8 @@ static void RecycleRegion_(MEMiExpHeapHead* exp, void** region) {
     ;
 }
 
+*/
+
 MEMiHeapHead* MEMCreateExpHeapEx(void* start, u32 size, u16 opt) {
     void* end = AddU32ToPtr(start, size);
 
@@ -257,10 +260,11 @@ void* MEMAllocFromExpHeapEx(MEMiHeapHead* heap, u32 size, s32 align) {
 
     return memBlock;
 }
-
+/*
 #ifndef NON_MATCHING
 #error MEMResizeForMBlockExpHeap has not yet been matched.
 #endif
+*/
 u32 MEMResizeForMBlockExpHeap(MEMiHeapHead* heap, void* memBlock, u32 size) {
     ;
     ;
