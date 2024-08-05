@@ -276,11 +276,11 @@ cflags_criware = [
 ]
 
 # Helper function for Dolphin libraries
-def DolphinLib(lib_name: str, objects: List[Object], extra_cflags=[]) -> Dict[str, Any]:
+def DolphinLib(lib_name: str, objects: List[Object], version="1.1", extra_cflags=[]) -> Dict[str, Any]:
     return {
         "lib": lib_name,
         "mw_console": "Wii",
-        "mw_version": "1.1",
+        "mw_version": version,
         "root_dir": "libs/RVL_SDK",
         "cflags": cflags_sdk + extra_cflags,
         "host": False,
@@ -1053,6 +1053,7 @@ config.libs = [
             Object(NonMatching, "revolution/hbm/synvoice.c"),
             Object(NonMatching, "revolution/hbm/seq.c"),
         ],
+        "1.0a",
         [   
             "-sdata 0",
             "-sdata2 0",
