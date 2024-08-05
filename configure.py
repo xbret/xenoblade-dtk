@@ -168,7 +168,6 @@ cflags_base = [
     "-enum int",
     "-fp hard",
     "-Cpp_exceptions off",
-    "-lang=c99", #TODO: add c99 lang flag on per lib basis
     # "-W all",
     "-O4,p",
     "-inline auto",
@@ -201,6 +200,7 @@ else:
 # Game/Monolithlib Flags
 cflags_game = [
     *cflags_base,
+    "-lang=c99",
     "-ipa file",
     "-inline auto",
     "-use_lmw_stmw on",
@@ -241,6 +241,7 @@ cflags_trk = [
 # Dolphin library flags
 cflags_sdk = [
     *cflags_base,
+    "-lang=c99",
     "-inline auto",
     "-ipa file",
     "-fp_contract off",
@@ -250,6 +251,7 @@ cflags_sdk = [
 # Ndev flags
 cflags_ndev = [
     *cflags_base,
+    "-lang=c99",
     "-inline auto",
     "-ipa file",
     "-func_align 4",
@@ -268,6 +270,7 @@ cflags_nw4r = [
 # Criware flags
 cflags_criware = [
     *cflags_base,
+    "-lang=c99",
     "-sdata 0",
     "-sdata2 0",
     "-use_lmw_stmw on",

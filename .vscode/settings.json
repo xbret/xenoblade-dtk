@@ -1,14 +1,9 @@
 {
     "[c]": {
-        "files.encoding": "utf8",
-        "editor.defaultFormatter": "xaver.clang-format"
+        "files.encoding": "utf8"
     },
     "[cpp]": {
-        "files.encoding": "utf8",
-        "editor.defaultFormatter": "xaver.clang-format"
-    },
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
+        "files.encoding": "utf8"
     },
     "editor.tabSize": 4,
 	"files.exclude": {
@@ -16,9 +11,11 @@
 		"**/*.ctx": true
 	},
     "files.insertFinalNewline": true,
-    "files.trimFinalNewlines": true,
     "files.associations": {
-        "*.inc": "cpp"
+        "*.cp": "cpp",
+        "*.asm": "wla-dx-asm",
+        "*.inc": "cpp",
+        "dstypes.h": "c"
     },
     "search.useIgnoreFiles": false,
     "search.exclude": {
