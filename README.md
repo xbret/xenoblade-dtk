@@ -12,7 +12,7 @@ Code progress URL:
 https://progress.decomp.club/data/[project]/[version]/all/?mode=shield&measure=code
 URL encoded then appended to: https://img.shields.io/endpoint?label=Code&url=
 -->
-[Progress]: https://img.shields.io/endpoint?label=Code&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fxenoblade%2Fjp%2Fall%2F%3Fmode%3Dshield%26measure%3Dcode
+[Progress]: https://img.shields.io/endpoint?label=Code&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fxenoblade%2Fjp%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
 <!---
 DOL progress URL:
 https://progress.decomp.club/data/[project]/[version]/dol/?mode=shield&measure=code
