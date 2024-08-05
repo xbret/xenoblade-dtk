@@ -2613,7 +2613,7 @@ kyoshin/appgame/CLoad.cpp:
 	.sdata      start:0x806656F0 end:0x806656F8
 	.sdata2     start:0x8066B698 end:0x8066B6A8
 
-kyoshin/appgame/NandData.cpp:
+kyoshin/appgame/CNandData.cpp:
 	extab       start:0x8001B54C end:0x8001B570
 	extabindex  start:0x800331F4 end:0x8003320C
 	.text       start:0x802AEA88 end:0x802AEB74

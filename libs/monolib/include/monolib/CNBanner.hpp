@@ -5,13 +5,7 @@
 
 class CNBanner : IWorkEvent {
 public:
-	CNBanner(const char* title, const char* desc, const char* bannerFilename, const char** iconFilenames, int* someArray){
-		init();
-		func_804F52F8(title);
-		func_804F5304(desc);
-		func_804F5310(bannerFilename);
-		func_804F531C(iconFilenames, someArray);
-	}
+	CNBanner();
 	virtual ~CNBanner();
 	void init();
 	virtual bool OnFileEvent(CEventFile* eventFile);
@@ -21,5 +15,7 @@ public:
 	void func_804F531C(const char** filenames, int* someArray);
 
 	//0x0: vtable
-	u8 unk4[0x321];
+	u8 unk4[0xC - 0x4];
+	u32 unkC;
+	u8 unk10[0x325 - 0x10];
 };

@@ -611,7 +611,7 @@ config.libs = [
             Object(NonMatching, "kyoshin/appgame/menu/CMenuTutorialList.cpp"),
             Object(NonMatching, "kyoshin/appgame/CTutorialList.cpp"),
             Object(NonMatching, "kyoshin/appgame/CLoad.cpp"),
-            Object(NonMatching, "kyoshin/appgame/NandData.cpp"),
+            Object(Matching, "kyoshin/appgame/CNandData.cpp"),
             Object(Matching, "kyoshin/appgame/ErrMesData.cpp", shift_jis = False, extra_cflags=["-enc UTF8"]),
             Object(NonMatching, "kyoshin/appgame/plugin/pluginHelp.cpp"),
             Object(NonMatching, "kyoshin/appgame/cf/voice/cvsys/CVS_THREAD_BATTLE_MAIN.cpp"),
