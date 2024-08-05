@@ -1,5 +1,5 @@
 Xenoblade  
-[![Build Status]][actions] ![Progress] ![DOL Progress] [![Discord Badge]][discord]
+[![Build Status]][actions] ![Code Progress] ![Data Progress] [![Discord Badge]][discord]
 =============
 
 <!--
@@ -9,16 +9,16 @@ Replace with your repository's URL.
 [actions]: https://github.com/xbret/xenoblade-dtk/actions/workflows/build.yml
 <!---
 Code progress URL:
-https://progress.decomp.club/data/[project]/[version]/all/?mode=shield&measure=code
+https://progress.decomp.club/data/[project]/[version]/dol/?mode=shield&measure=code
 URL encoded then appended to: https://img.shields.io/endpoint?label=Code&url=
 -->
-[Progress]: https://img.shields.io/endpoint?label=Code&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fxenoblade%2Fjp%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
+[Code Progress]: https://img.shields.io/endpoint?label=Code&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fxenoblade%2Fjp%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
 <!---
-DOL progress URL:
-https://progress.decomp.club/data/[project]/[version]/dol/?mode=shield&measure=code
-URL encoded then appended to: https://img.shields.io/endpoint?label=DOL&url=
+Data progress URL:
+https://progress.decomp.club/data/[project]/[version]/dol/?mode=shield&measure=data
+URL encoded then appended to: https://img.shields.io/endpoint?label=Data&url=
 -->
-[DOL Progress]: https://img.shields.io/endpoint?label=DOL&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fxenoblade%2Fjp%2Fdol%2F%3Fmode%3Dshield%26measure%3Dcode
+[Data Progress]: https://img.shields.io/endpoint?label=Data&url=https%3A%2F%2Fprogress.decomp.club%2Fdata%2Fxenoblade%2Fjp%2Fdol%2F%3Fmode%3Dshield%26measure%3Ddata
 <!--
 Replace with your Discord server's ID and invite URL.
 -->
