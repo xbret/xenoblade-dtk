@@ -32,6 +32,8 @@ This repository does **not** contain any game assets or assembly whatsoever. An 
 Supported versions:
 
 - `jp`: Rev 0 (JP)
+- `eu`: Rev 0 (EU)
+- `us`: Rev 0 (US)
 
 Dependencies
 ============
