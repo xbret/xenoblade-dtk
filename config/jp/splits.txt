@@ -2717,9 +2717,9 @@ kyoshin/appgame/help/CHelp.cpp:
 	extab       start:0x8001BD48 end:0x8001BD58
 	extabindex  start:0x800338B4 end:0x800338CC
 	.text       start:0x802B7BD4 end:0x802B7D00
-	.rodata     start:0x8050CBA0 end:0x8050CD98
-	.data       start:0x8053EA90 end:0x8053EF00
-	.sdata      start:0x806657A0 end:0x80665848
+	.rodata     start:0x8050CBA0 end:0x8050CD80
+	.data       start:0x8053EA90 end:0x8053EED8
+	.sdata      start:0x806657A0 end:0x80665840
 
 kyoshin/appgame/help/CHelp_ArtsAttack.cpp:
 	extab       start:0x8001BD58 end:0x8001BD60
@@ -2829,6 +2829,9 @@ kyoshin/appgame/help/CHelp_Target.cpp:
 	extab       start:0x8001BE30 end:0x8001BE38
 	extabindex  start:0x800339D4 end:0x800339E0
 	.text       start:0x802B88C8 end:0x802B8A3C
+	.rodata     start:0x8050CD80 end:0x8050CD98
+	.data       start:0x8053EED8 end:0x8053EF00
+	.sdata      start:0x80665840 end:0x80665848
 
 kyoshin/appgame/code_802B8A3C.cpp:
 	extab       start:0x8001BE38 end:0x8001BE84

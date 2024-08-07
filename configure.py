@@ -646,7 +646,7 @@ config.libs = [
             Object(NonMatching, "kyoshin/appgame/help/CHelp_ShopSel.cpp"),
             Object(NonMatching, "kyoshin/appgame/help/CHelp_Sp.cpp"),
             Object(NonMatching, "kyoshin/appgame/help/CHelp_Talk.cpp"),
-            Object(NonMatching, "kyoshin/appgame/help/CHelp_Target.cpp"),
+            Object(Matching, "kyoshin/appgame/help/CHelp_Target.cpp"),
             Object(NonMatching, "kyoshin/appgame/code_802B8A3C.cpp"),
             Object(Matching, "kyoshin/appgame/plugin/pluginVoice.cpp"),
             Object(NonMatching, "kyoshin/appgame/code_802B9064.cpp"),
