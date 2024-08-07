@@ -1,0 +1,25 @@
+Sections:
+	.init       type:code align:4
+	extab       type:rodata align:32
+	extabindex  type:rodata align:32
+	.text       type:code align:32
+	.ctors      type:rodata align:8
+	.dtors      type:rodata align:8
+	.rodata     type:rodata align:32
+	.data       type:data align:16
+	.bss        type:bss align:128
+	.sdata      type:data align:16
+	.sbss       type:bss align:32
+	.sdata2     type:rodata align:8
+	.sbss2      type:bss align:32
+
+Runtime/global_destructor_chain.c:
+	.text       start:0x802BC10C end:0x802BC16C
+	.sbss       start:0x80664C40 end:0x80664C48
+
+Runtime/__init_cpp_exceptions.cpp:
+	.text       start:0x802BD1E4 end:0x802BD254
+	.ctors      start:0x804F9FC0 end:0x804F9FC4 rename:.ctors$10
+	.dtors      start:0x804FA1C0 end:0x804FA1C4 rename:.dtors$10
+	.dtors      start:0x804FA1C4 end:0x804FA1C8 rename:.dtors$15
+	.sdata      start:0x80662F48 end:0x80662F50
