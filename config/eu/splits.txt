@@ -23,8 +23,7 @@ split1.c:
 	.bss        start:0x80570480 end:0x80577790
 	.sdata      start:0x80661880 end:0x80662F30
 	.sbss       start:0x80663D00 end:0x80664C40
-	.sdata2     start:0x80665AA0 end:0x8066B530
-	.sbss2      start:0x8066B540 end:0x8066B55C
+	.sdata2     start:0x80665AA0 end:0x80669020
 
 Runtime/__mem.c:
 	.init       start:0x80004000 end:0x80004380
@@ -86,13 +85,39 @@ MetroTRK/__exception.s:
 
 split2.c:
 	.init       start:0x800062C0 end:0x80006624
-	extab       start:0x8001C02C end:0x800211AC
-	extabindex  start:0x80033DCC end:0x80039568
-	.text       start:0x802BE828 end:0x804F9FBC
-	.ctors      start:0x804FA0A8 end:0x804FA1B8
+	extab       start:0x8001C02C end:0x8001CB24
+	extabindex  start:0x80033DCC end:0x8003496C
+	.text       start:0x802BE828 end:0x8044A7B8
+	.ctors      start:0x804FA0A8 end:0x804FA130
 	.dtors      start:0x804FA1C8 end:0x804FA1C8
-	.rodata     start:0x80513AD8 end:0x805248D4
-	.data       start:0x8053B9D8 end:0x8057042C
-	.bss        start:0x80577910 end:0x80661874
-	.sdata      start:0x80662F50 end:0x80663CF0
-	.sbss       start:0x80664C48 end:0x80665A9C
+	.rodata     start:0x80513AD8 end:0x80522990
+	.data       start:0x8053B9D8 end:0x8056BDF8
+	.bss        start:0x80577910 end:0x806574B8
+	.sdata      start:0x80662F50 end:0x80663600
+	.sbss       start:0x80664C48 end:0x80665648
+	.sdata2     start:0x80669020 end:0x8066A360
+	.sbss2      start:0x8066B540 end:0x8066B55C
+
+device/CDeviceVI.cpp:
+	extab       start:0x8001CB24 end:0x8001CC1C
+	extabindex  start:0x8003496C end:0x80034A2C
+	.text       start:0x8044A7B8 end:0x8044B9B0
+	.ctors      start:0x804FA130 end:0x804FA134
+	.rodata     start:0x80522990 end:0x80522A50
+	.data       start:0x8056BDF8 end:0x8056BF68
+	.bss        start:0x806574B8 end:0x806574F8
+	.sdata      start:0x80663600 end:0x80663618
+	.sbss       start:0x80665648 end:0x80665650
+	.sdata2     start:0x8066A360 end:0x8066A378
+
+split3.c:
+	extab       start:0x8001CC1C end:0x800211AC
+	extabindex  start:0x80034A2C end:0x80039568
+	.text       start:0x8044B9B0 end:0x804F9FBC
+	.ctors      start:0x804FA134 end:0x804FA1B8
+	.rodata     start:0x80522A50 end:0x805248D4
+	.data       start:0x8056BF68 end:0x8057042C
+	.bss        start:0x806574F8 end:0x80661874
+	.sdata      start:0x80663618 end:0x80663CF0
+	.sbss       start:0x80665650 end:0x80665A9C
+	.sdata2     start:0x8066A378 end:0x8066B530

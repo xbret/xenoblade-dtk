@@ -202,7 +202,13 @@ bool CDeviceVI::isTvFormatPal(){
 }
 
 u32 CDeviceVI::getSomeSize(){
+#if VERSION == VERSION_JPN
 	return 0x12C000;
+#elif VERSION == VERSION_PAL
+	return 0x152C00;
+#elif VERSION == VERSION_USA
+	return 0x11D000;
+#endif
 }
 
 float CDeviceVI::getSomeRatio(){
