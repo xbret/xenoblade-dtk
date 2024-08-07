@@ -30,6 +30,7 @@ DEFAULT_VERSION = 0
 VERSIONS = [
     "jp",  # 0
     "eu",  # 1
+    "us",  # 2
 ]
 
 parser = argparse.ArgumentParser()
